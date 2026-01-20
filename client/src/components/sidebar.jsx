@@ -25,12 +25,11 @@ function Sidebar() {
 
   return (
     <div className="sidebar">
-      <div className="sidebar-logo-section">
+      <Link to="/" className="sidebar-logo-section">
         <h1 className="sidebar-logo">ROYAL VILLAS</h1>
         <h1 className="sidebar-logo1">RV</h1>
-
         <p className="sidebar-subtitle">Hotel Management</p>
-      </div>
+      </Link>
 
       <div className="sidebar-user-section">
         <div className="sidebar-user-info">

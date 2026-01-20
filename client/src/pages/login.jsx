@@ -28,8 +28,8 @@ function Login() {
         <form className="login-form" onSubmit={handleSubmit}>
           
           <div className="form-header">
-            <p className="welcome-text">WELCOME BACK</p>
-            <h2>Sign In</h2>
+            <p className="welcome-text">WELCOME BACK TO</p>
+            <h2>Royal Villas</h2>
             <p className="login-subtitle">
               Access your dashboard and manage hotel operations.
             </p>

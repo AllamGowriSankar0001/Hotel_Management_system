@@ -29,7 +29,7 @@ function Reservation() {
   async function fetchreservation() {
     try {
       const reservationres = await fetch(
-        "http://localhost:3000/api/reservations/getallreservations"
+        "https://hotel-management-system-2spj.onrender.com/api/reservations/getallreservations"
       );
       const reservationdata = await reservationres.json();
       setReservations(reservationdata.Allreservation);
@@ -40,7 +40,7 @@ function Reservation() {
   
   async function checkoutReservation(roomNo) {
     try {
-      const res = await fetch(`http://localhost:3000/api/reservations/checkout/${roomNo}`,
+      const res = await fetch(`https://hotel-management-system-2spj.onrender.com/api/reservations/checkout/${roomNo}`,
         {
           method: "PUT",
           headers: {
@@ -107,7 +107,7 @@ function Reservation() {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/api/reservations/roomreservation/${reservation.roomNo}`,
+        `https://hotel-management-system-2spj.onrender.com/api/reservations/roomreservation/${reservation.roomNo}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

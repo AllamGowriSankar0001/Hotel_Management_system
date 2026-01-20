@@ -16,7 +16,7 @@ function Housekeeping() {
 
   async function fetchusersdata() {
     try {
-      const users = await fetch("http://localhost:3000/api/users/allusers");
+      const users = await fetch("https://hotel-management-system-2spj.onrender.com/api/users/allusers");
       const usersdata = await users.json();
       const cleaners = usersdata.filter((user) => user.role === "cleaner");
       setCleanerslist(cleaners);
@@ -28,7 +28,7 @@ function Housekeeping() {
   async function allcleanings() {
     try {
       const fetchdata = await fetch(
-        "http://localhost:3000/api/cleanings/allcleanings",
+        "https://hotel-management-system-2spj.onrender.com/api/cleanings/allcleanings",
       );
       const res = await fetchdata.json();
       setCleaningList(res);
@@ -43,7 +43,7 @@ function Housekeeping() {
       const userdata = JSON.parse(localStorage.getItem("userdata")) || {};
       const token = userdata.token;
       const res = await fetch(
-        `http://localhost:3000/api/cleanings/startcleaning/${roomNo}`,
+        `https://hotel-management-system-2spj.onrender.com/api/cleanings/startcleaning/${roomNo}`,
         {
           method: "POST",
           headers: {
@@ -74,7 +74,7 @@ function Housekeeping() {
       const userdata = JSON.parse(localStorage.getItem("userdata")) || {};
       const token = userdata.token;
       const res = await fetch(
-        `http://localhost:3000/api/cleanings/completecleaning/${roomNo}`,
+        `https://hotel-management-system-2spj.onrender.com/api/cleanings/completecleaning/${roomNo}`,
         {
           method: "POST",
           headers: {

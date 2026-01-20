@@ -8,7 +8,7 @@ function Rooms() {
   const navigate = useNavigate();
 
   const { data, error, loading } = useFetch(
-    "http://localhost:3000/api/rooms/allfloors"
+    "https://hotel-management-system-2spj.onrender.com/api/rooms/allfloors"
   );
   
   useEffect(() => {
@@ -18,7 +18,7 @@ function Rooms() {
       const allRooms = {};
       for (let floor of data) {
         const res = await fetch(
-          `http://localhost:3000/api/rooms/floor/${floor}`
+          `https://hotel-management-system-2spj.onrender.com/api/rooms/floor/${floor}`
         );
         const rooms = await res.json();
         allRooms[floor] = rooms;

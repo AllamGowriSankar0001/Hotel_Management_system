@@ -19,7 +19,7 @@ function Dashboard() {
   
   async function fetchusersdata() {
     try {
-      const users = await fetch("http://localhost:3000/api/users/allusers");
+      const users = await fetch("https://hotel-management-system-2spj.onrender.com/api/users/allusers");
       const usersdata = await users.json();
       let cleaners = usersdata.filter((user) => user.role === "cleaner").length;
       setCleanerslength(cleaners);
@@ -30,7 +30,7 @@ function Dashboard() {
   
   async function fetchroomdata() {
     try {
-      const rooms = await fetch("http://localhost:3000/api/rooms/allrooms");
+      const rooms = await fetch("https://hotel-management-system-2spj.onrender.com/api/rooms/allrooms");
       const roomdata = await rooms.json();
       let occupied = roomdata.filter((room) => room.status === "occupied").length;
       let cleaning = roomdata.filter(

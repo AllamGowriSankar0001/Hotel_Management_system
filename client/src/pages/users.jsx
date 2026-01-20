@@ -31,7 +31,7 @@ function Users() {
   const isAdmin = userRole?.toLowerCase() === "admin";
   async function deleteUser(userId, token) {
     const confirmDelete = await fetch(
-      `http://localhost:3000/api/users/deleteuser/${userId}`,
+      `https://hotel-management-system-2spj.onrender.com/api/users/deleteuser/${userId}`,
       {
         method: "DELETE",
         headers: {
@@ -54,7 +54,7 @@ function Users() {
   async function fetchUsers() {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3000/api/users/allusers");
+      const response = await fetch("https://hotel-management-system-2spj.onrender.com/api/users/allusers");
       const data = await response.json();
       setUsers(data);
     } catch (err) {
@@ -66,7 +66,7 @@ function Users() {
   async function updateUser(id) {
     try {
       // console.log("Updating user:", id, updateUserData);
-      const res = await fetch(`http://localhost:3000/api/users/updateuser/${id}`,{
+      const res = await fetch(`https://hotel-management-system-2spj.onrender.com/api/users/updateuser/${id}`,{
         method:"PUT",
         headers:{
           "Content-Type":"application/json",
@@ -96,7 +96,7 @@ function Users() {
   }
   async function addUser() {
     try {
-      const newUser = await fetch(`http://localhost:3000/api/users/createuser`, {
+      const newUser = await fetch(`https://hotel-management-system-2spj.onrender.com/api/users/createuser`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

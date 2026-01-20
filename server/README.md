@@ -25,40 +25,40 @@ node index.js
 ```
 
 ## API Base URL
-http://localhost:3000/api
+https://hotel-management-system-2spj.onrender.com/api
 
 ## 👤 USER ENDPOINTS
 
-GET     http://localhost:3000/api/users/allusers
-GET     http://localhost:3000/api/users/role/:role
-GET     http://localhost:3000/api/users/user/:id
-POST    http://localhost:3000/api/users/createuser
-PUT     http://localhost:3000/api/users/updateuser/:id
-PUT     http://localhost:3000/api/users/updatepassword/:id
-POST    http://localhost:3000/api/users/login
-DELETE  http://localhost:3000/api/users/deleteuser/:id
+GET     https://hotel-management-system-2spj.onrender.com/api/users/allusers
+GET     https://hotel-management-system-2spj.onrender.com/api/users/role/:role
+GET     https://hotel-management-system-2spj.onrender.com/api/users/user/:id
+POST    https://hotel-management-system-2spj.onrender.com/api/users/createuser
+PUT     https://hotel-management-system-2spj.onrender.com/api/users/updateuser/:id
+PUT     https://hotel-management-system-2spj.onrender.com/api/users/updatepassword/:id
+POST    https://hotel-management-system-2spj.onrender.com/api/users/login
+DELETE  https://hotel-management-system-2spj.onrender.com/api/users/deleteuser/:id
 
 ## 🏨 ROOM ENDPOINTS
 
-POST    http://localhost:3000/api/rooms/createrooms
-GET     http://localhost:3000/api/rooms/allrooms
-GET     http://localhost:3000/api/rooms/type/:roomType
-GET     http://localhost:3000/api/rooms/room/:roomNo
-GET     http://localhost:3000/api/rooms/floor/:floor
-PUT     http://localhost:3000/api/rooms/updateroom/:roomNo
+POST    https://hotel-management-system-2spj.onrender.com/api/rooms/createrooms
+GET     https://hotel-management-system-2spj.onrender.com/api/rooms/allrooms
+GET     https://hotel-management-system-2spj.onrender.com/api/rooms/type/:roomType
+GET     https://hotel-management-system-2spj.onrender.com/api/rooms/room/:roomNo
+GET     https://hotel-management-system-2spj.onrender.com/api/rooms/floor/:floor
+PUT     https://hotel-management-system-2spj.onrender.com/api/rooms/updateroom/:roomNo
 
 ## 📅 RESERVATION ENDPOINTS
 
-POST    http://localhost:3000/api/reservations/roomreservation/:roomNo
-PUT     http://localhost:3000/api/reservations/update/reservation/:guestPhone
-PUT     http://localhost:3000/api/reservations/checkout/reservation/:guestPhone
-DELETE  http://localhost:3000/api/reservations/update/reservation/:guestPhone
+POST    https://hotel-management-system-2spj.onrender.com/api/reservations/roomreservation/:roomNo
+PUT     https://hotel-management-system-2spj.onrender.com/api/reservations/update/reservation/:guestPhone
+PUT     https://hotel-management-system-2spj.onrender.com/api/reservations/checkout/reservation/:guestPhone
+DELETE  https://hotel-management-system-2spj.onrender.com/api/reservations/update/reservation/:guestPhone
 
 ## 🧹 CLEANING ENDPOINTS
 
-GET     http://localhost:3000/api/cleanings/allcleanings
-POST    http://localhost:3000/api/cleanings/startcleaning
-POST    http://localhost:3000/api/cleanings/completecleaning
+GET     https://hotel-management-system-2spj.onrender.com/api/cleanings/allcleanings
+POST    https://hotel-management-system-2spj.onrender.com/api/cleanings/startcleaning
+POST    https://hotel-management-system-2spj.onrender.com/api/cleanings/completecleaning
 
 ---
 

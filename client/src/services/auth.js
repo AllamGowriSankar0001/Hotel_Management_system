@@ -3,7 +3,7 @@ export async function verifyToken() {
     const userdata = JSON.parse(localStorage.getItem('userdata')) || {};
     const token = userdata.token;
     if (!token) return { ok: false, message: 'No token found' };
-    const res = await fetch('http://localhost:3000/api/users/verify', {
+    const res = await fetch('https://hotel-management-system-2spj.onrender.com/api/users/verify', {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` },
     });

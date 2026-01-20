@@ -385,6 +385,7 @@ table td {
 
 .sidebar-logo-section {
   padding: 24px 20px;
+  text-decoration: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -1482,6 +1483,7 @@ table td {
     display: none;
   }
   .sidebar-logo-section {
+    text-decoration: none;
     content: RV;
     padding: 12px 10px;
     text-align: center;

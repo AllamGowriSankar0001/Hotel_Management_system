@@ -543,6 +543,7 @@ table td {
   gap: 3%;
   background-color: rgb(255, 255, 255);
   overflow: hidden;
+  padding-bottom: 100px;
 }
 
 .content {

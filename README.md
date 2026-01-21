@@ -27,6 +27,62 @@ Full-stack hotel management web app with a **React (Vite)** frontend and a **Nod
   - `dbconnect.js` — Mongo connection helper  
   - `index.js` — API entry point  
 
+## Preview (UI screenshots)
+
+### Login
+
+This is the login page where staff members enter their **User ID** and **Password** to access the system.
+
+<img src="Images/Screenshot%202026-01-21%20123041.png" alt="Login page preview" width="100%" />
+
+### Dashboard
+
+This page provides a quick overview of the hotel’s current status:
+
+- Total rooms
+- Available vs occupied
+- Rooms that need cleaning
+- Cleaners available
+
+<img src="Images/Screenshot%202026-01-21%20121413.png" alt="Dashboard page preview" width="100%" />
+
+### Rooms
+
+This page displays rooms grouped by floor and shows their type and availability. You can use it to quickly pick an **available room** and start a reservation flow.
+
+<img src="Images/Screenshot%202026-01-21%20121429.png" alt="Rooms page preview" width="100%" />
+
+### Reservations
+
+This page is used to create and manage guest reservations:
+
+- Enter guest details (name, phone, dates)
+- Select stay duration
+- Confirm reservation and see saved reservations in the table
+- Filter/search existing reservations and view status (checked-in / checked-out)
+
+<img src="Images/Screenshot%202026-01-21%20121443.png" alt="Reservations page preview" width="100%" />
+
+### Housekeeping
+
+This page helps track cleaning tasks:
+
+- View cleaning records per room
+- Track cleaning status (in progress / completed)
+- Monitor available cleaners
+
+<img src="Images/Screenshot%202026-01-21%20121455.png" alt="Housekeeping page preview" width="100%" />
+
+### Users Management
+
+Admin-facing page for managing system users:
+
+- Create new users and assign roles
+- View existing users
+- Perform actions like update/delete (based on permissions)
+
+<img src="Images/Screenshot%202026-01-21%20121514.png" alt="Users management page preview" width="100%" />
+
 ## Prerequisites
 
 - Node.js (LTS recommended)

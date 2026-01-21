@@ -115,8 +115,3 @@ Authentication: Protected routes expect `Authorization: Bearer <token>`; JWT is 
 - `POST /startcleaning/:roomNo` — start cleaning (protected)
 - `POST /completecleaning/:roomNo` — complete cleaning (protected)
 
-## Notes for GitHub
-
-- Do not commit `server/.env`.
-- Ensure `node_modules/` is excluded for both `client/` and `server/`.
-

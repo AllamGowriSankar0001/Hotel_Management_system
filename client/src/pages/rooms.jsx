@@ -2,9 +2,19 @@ import useFetch from "../components/fetch";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import { useEffect, useState } from "react";
+import { Pencil } from "lucide-react";
 
 function Rooms() {
   const [roomsByFloor, setRoomsByFloor] = useState({});
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [floorInput, setFloorInput] = useState("");
+  const [roomNoInput, setRoomNoInput] = useState("");
+  const [roomTypeInput, setRoomTypeInput] = useState("single");
+  const [statusInput, setStatusInput] = useState("available");
+  const [submitting, setSubmitting] = useState(false);
+  const [editingRoom, setEditingRoom] = useState(null);
+  const [originalRoomNo, setOriginalRoomNo] = useState(null);
+  const [editSubmitting, setEditSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const { data, error, loading } = useFetch(
@@ -27,6 +37,19 @@ function Rooms() {
     }
     fetchRooms();
   }, [data]);
+
+  async function refreshRooms() {
+    if (!data) return;
+    const allRooms = {};
+    for (let floor of data) {
+      const res = await fetch(
+        `https://hotel-management-system-2spj.onrender.com/api/rooms/floor/${floor}`
+      );
+      const rooms = await res.json();
+      allRooms[floor] = rooms;
+    }
+    setRoomsByFloor(allRooms);
+  }
 
   if (loading) return <p className="loading-text">Loading rooms…</p>;
   if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
@@ -53,8 +76,232 @@ function Rooms() {
             <span className="room-badge-dot" style={{ background: "#000" }}></span>
             Cleaning
           </span>
+          <button
+            style={{ marginLeft: "12px", marginTop: 0 }}
+            onClick={() => setShowAddForm((prev) => !prev)}
+          >
+            <i
+              className={`fa-solid ${showAddForm ? "fa-times" : "fa-plus"}`}
+              style={{ marginRight: "5px" }}
+            >
+              {" "}
+            </i>{" "}
+            {showAddForm ? "Close" : "Add Room"}
+          </button>
         </div>
       </div>
+
+      {showAddForm && (
+        <div className="user-form-card">
+          <h2>Add Room</h2>
+
+          <div className="user-form-grid">
+            <input
+              type="text"
+              placeholder="Floor (e.g., 1)"
+              value={floorInput}
+              onChange={(e) => setFloorInput(e.target.value)}
+            />
+
+            <input
+              type="text"
+              placeholder="Room Number (e.g., 101)"
+              value={roomNoInput}
+              onChange={(e) => setRoomNoInput(e.target.value)}
+            />
+
+            <select
+              value={roomTypeInput}
+              onChange={(e) => setRoomTypeInput(e.target.value)}
+              className="user-form-select"
+            >
+              <option value="single">Single</option>
+              <option value="double">Double</option>
+              <option value="suite">Suite</option>
+            </select>
+
+            <select
+              value={statusInput}
+              onChange={(e) => setStatusInput(e.target.value)}
+              className="user-form-select"
+            >
+              <option value="available">Available</option>
+              <option value="occupied">Occupied</option>
+              <option value="cleaning_needed">Cleaning Needed</option>
+              <option value="under_maintenance">Under Maintenance</option>
+            </select>
+          </div>
+
+          <button
+            className="create-user-btn"
+            disabled={submitting}
+            onClick={async () => {
+              if (!floorInput || !roomNoInput || !roomTypeInput) return;
+              try {
+                setSubmitting(true);
+                const res = await fetch(
+                  "https://hotel-management-system-2spj.onrender.com/api/rooms/createrooms",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      floor: floorInput,
+                      rooms: [
+                        {
+                          roomNo: roomNoInput,
+                          roomType: roomTypeInput,
+                          status: statusInput || "available",
+                        },
+                      ],
+                    }),
+                  }
+                );
+
+                if (!res.ok) {
+                  const err = await res.json().catch(() => ({ message: "Failed to add room" }));
+                  alert(err.message || "Failed to add room");
+                  return;
+                }
+
+                // If the new floor already exists, we can refresh in-place.
+                // If it's a brand new floor, refresh is easiest (floors list comes from another request).
+                const floorExists = Array.isArray(data) && data.includes(floorInput);
+                if (floorExists) {
+                  await refreshRooms();
+                } else {
+                  window.location.reload();
+                }
+
+                setFloorInput("");
+                setRoomNoInput("");
+                setRoomTypeInput("single");
+                setStatusInput("available");
+                setShowAddForm(false);
+              } catch (err) {
+                console.error(err);
+              } finally {
+                setSubmitting(false);
+              }
+            }}
+          >
+            {submitting ? "Adding..." : "Add Room"}
+          </button>
+        </div>
+      )}
+
+      {editingRoom && (
+        <div className="user-form-card">
+          <h2>Update Room</h2>
+
+          <div className="user-form-grid">
+            <input
+              type="number"
+              placeholder="Floor"
+              value={editingRoom.floor}
+              onChange={(e) =>
+                setEditingRoom((prev) => ({
+                  ...prev,
+                  floor: parseInt(e.target.value) || prev.floor,
+                }))
+              }
+            />
+
+            <input
+              type="text"
+              placeholder="Room Number"
+              value={editingRoom.roomNo}
+              onChange={(e) =>
+                setEditingRoom((prev) => ({
+                  ...prev,
+                  roomNo: e.target.value,
+                }))
+              }
+            />
+
+            <select
+              value={editingRoom.roomType}
+              onChange={(e) =>
+                setEditingRoom((prev) => ({
+                  ...prev,
+                  roomType: e.target.value,
+                }))
+              }
+              className="user-form-select"
+            >
+              <option value="single">Single</option>
+              <option value="double">Double</option>
+              <option value="suite">Suite</option>
+            </select>
+
+            <select
+              value={editingRoom.status}
+              onChange={(e) =>
+                setEditingRoom((prev) => ({
+                  ...prev,
+                  status: e.target.value,
+                }))
+              }
+              className="user-form-select"
+            >
+              <option value="available">Available</option>
+              <option value="occupied">Occupied</option>
+              <option value="cleaning_needed">Cleaning Needed</option>
+              <option value="under_maintenance">Under Maintenance</option>
+            </select>
+          </div>
+
+          <div style={{ display: "flex", gap: "12px" }}>
+            <button
+              className="create-user-btn"
+              disabled={editSubmitting}
+              onClick={async () => {
+                try {
+                  setEditSubmitting(true);
+                  const res = await fetch(
+                    `https://hotel-management-system-2spj.onrender.com/api/rooms/updateroom/${originalRoomNo}`,
+                    {
+                      method: "PUT",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        floor: editingRoom.floor,
+                        roomNo: editingRoom.roomNo,
+                        roomType: editingRoom.roomType,
+                        status: editingRoom.status,
+                      }),
+                    }
+                  );
+
+                  if (!res.ok) {
+                    const err = await res.json().catch(() => ({ message: "Failed to update room" }));
+                    alert(err.message || "Failed to update room");
+                    return;
+                  }
+
+                  await refreshRooms();
+                  setEditingRoom(null);
+                  setOriginalRoomNo(null);
+                } catch (err) {
+                  console.error(err);
+                  alert("Error updating room: " + err.message);
+                } finally {
+                  setEditSubmitting(false);
+                }
+              }}
+            >
+              {editSubmitting ? "Updating..." : "Update Room"}
+            </button>
+
+            <button className="action-button" onClick={() => {
+              setEditingRoom(null);
+              setOriginalRoomNo(null);
+            }}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       <ul className="rooms-floor-list">
         {data.map((floor, index) => (
@@ -99,8 +346,27 @@ function Rooms() {
                         });
                       }
                     }}
-                    style={roomCardStyle}
+                    style={{ ...roomCardStyle, position: "relative" }}
                   >
+                    <button
+                      type="button"
+                      className="room-edit-btn"
+                      aria-label={`Edit room ${room.roomNo}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setOriginalRoomNo(room.roomNo);
+                        setEditingRoom({
+                          floor,
+                          roomNo: room.roomNo,
+                          roomType: room.roomType,
+                          status: room.status,
+                        });
+                        setShowAddForm(false);
+                      }}
+                    >
+                      <Pencil size={16} />
+                    </button>
+
                     <h4>{room.roomNo}</h4>
                     <div style={{
                       display: "flex",

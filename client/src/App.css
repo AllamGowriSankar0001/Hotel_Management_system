@@ -162,7 +162,7 @@ input:focus {
 ================================ */
 button {
   margin-top: 1rem;
-  padding: 0.9rem;
+  padding: 0.6rem;
   border-radius: 5px;
   border: none;
 
@@ -214,6 +214,37 @@ button:active {
   padding: 10px 15px !important;
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.203);
   cursor: pointer;
+}
+
+.room-edit-btn {
+  position: absolute;
+  top: 7px;
+  right: 0px;
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0);
+  color: #1b1b1b !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+  z-index: 5;
+}
+
+.room-edit-btn svg {
+  display: block;
+  stroke: currentColor;
+}
+
+
+
+.room-edit-btn:active {
+  transform: translateY(0);
 }
 /* Container */
 .guest-form {

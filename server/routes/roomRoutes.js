@@ -82,13 +82,47 @@ router.get('/floor/:floor', async(req,res)=>{
     }
 });
 router.put('/updateroom/:roomNo', async(req,res)=>{
-    const {status} = req.body;
+    const {status, floor, roomNo, roomType} = req.body;
     try{
         const room =  await Room.findOne({roomNo: req.params.roomNo});
         if(!room){
             return res.status(404).json({ message: 'Room not found' });
         }
-        room.status = status;
+        
+        // If roomNo is being changed, check if new roomNo already exists
+        if(roomNo && roomNo !== req.params.roomNo){
+            const existingRoom = await Room.findOne({roomNo: roomNo});
+            if(existingRoom){
+                return res.status(400).json({ message: 'Room number already exists' });
+            }
+        }
+        
+        // Update fields if provided
+        if(status !== undefined){
+            if(!['available', 'occupied', 'cleaning_needed', 'under_maintenance'].includes(status)){
+                return res.status(400).json({ message: 'Invalid status value' });
+            }
+            room.status = status;
+        }
+        
+        if(floor !== undefined){
+            if(typeof floor !== 'number'){
+                return res.status(400).json({ message: 'Floor must be a number' });
+            }
+            room.floor = floor;
+        }
+        
+        if(roomNo !== undefined){
+            room.roomNo = roomNo;
+        }
+        
+        if(roomType !== undefined){
+            if(!['single', 'double', 'suite'].includes(roomType)){
+                return res.status(400).json({ message: 'Invalid room type. Must be single, double, or suite' });
+            }
+            room.roomType = roomType;
+        }
+        
         await room.save();
         res.status(200).json(room);
     }

@@ -1,6 +1,7 @@
-/* ================================
-   ROOT VARIABLES (LUXURY GOLD)
-================================ */
+/* ============================================
+   GLOBAL STYLES & CSS VARIABLES
+   ============================================ */
+
 :root {
   --gold-primary: #c6a15b;
   --gold-light: #e6c87a;
@@ -10,9 +11,6 @@
   --charcoal: #1e1e1e;
 }
 
-/* ================================
-GLOBAL RESET
-================================ */
 * {
   margin: 0;
   padding: 0;
@@ -32,9 +30,11 @@ body {
   color: white;
 }
 
-/* ================================
-   BACKGROUND
-================================ */
+/* ============================================
+   LOGIN PAGE STYLES
+   Used in: login.jsx
+   ============================================ */
+
 .container {
   width: 100%;
   height: 100vh;
@@ -48,9 +48,6 @@ body {
   background-repeat: no-repeat;
 }
 
-/* ================================
-   CENTER LAYOUT
-================================ */
 .login-container {
   width: 100%;
   height: 100%;
@@ -60,9 +57,6 @@ body {
   justify-content: center;
 }
 
-/* ================================
-   GLASS LOGIN CARD
-================================ */
 .login-form {
   width: 420px;
   padding: 3rem 2.8rem;
@@ -80,9 +74,6 @@ body {
   gap: 1.4rem;
 }
 
-/* ================================
-   HEADER
-================================ */
 .form-header {
   text-align: center;
   margin-bottom: 0.5rem;
@@ -117,9 +108,6 @@ body {
   margin-top: 6px;
 }
 
-/* ================================
-   FORM GROUPS
-================================ */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -132,9 +120,6 @@ label {
   color: var(--ivory);
 }
 
-/* ================================
-   INPUTS
-================================ */
 input {
   padding: 0.85rem 1rem;
   border-radius: 12px;
@@ -157,15 +142,10 @@ input:focus {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* ================================
-   BUTTON
-================================ */
 button {
-  margin-top: 1rem;
   padding: 0.9rem;
-  border-radius: 5px;
+  border-radius: 10px;
   border: none;
-
   background-color: var(--charcoal);
   color: white;
   font-size: 1rem;
@@ -173,7 +153,6 @@ button {
   font-family: "Poppins", sans-serif;
   cursor: pointer;
   transition: all 0.3s ease;
-
 }
 
 button:hover {
@@ -183,13 +162,19 @@ button:hover {
 button:active {
   transform: translateY(0);
 }
+
+/* ============================================
+   ROOMS PAGE STYLES
+   Used in: rooms.jsx
+   ============================================ */
+
 .room-list {
   margin-top: 20px !important;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* ✅ each card min 200px */
-  gap: 1rem;        /* space between cards */
-  list-style: none;  /* remove bullets */
-  padding: 0;        /* remove default ul padding */
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
   margin: 0;
   width: 100%;
 }
@@ -201,18 +186,17 @@ button:active {
 }
 
 .roomcard {
-  border: 1px solid #ccc;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 8px;
-  padding: 1rem;
-  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 16px 12px !important;
+  background: #ffffff;
   text-align: center;
   min-width: 100px;  
-  padding: 10px 15px !important;
-  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.203);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
   cursor: pointer;
 }
 
@@ -226,14 +210,15 @@ button:active {
   padding: 0;
   line-height: 0;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0);
   color: #1b1b1b !important;
+  background: rgba(255, 255, 255, 0);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
   z-index: 5;
+  border: none;
+  box-shadow: none;
 }
 
 .room-edit-btn svg {
@@ -241,91 +226,256 @@ button:active {
   stroke: currentColor;
 }
 
-.room-edit-btn:hover {
-  transform: translateY(-1px);
-  background: #ffffff;
-  border-color: rgba(0, 0, 0, 0.2);
+/* ============================================
+   RESERVATION PAGE STYLES
+   Used in: reservation.jsx
+   ============================================ */
+
+.guest-form {
+  flex: 1;
+  min-width: 0;
+  height: fit-content;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
-.room-edit-btn:active {
-  transform: translateY(0);
+.guest-form:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
 }
-/* Container */
-.guest-form {
-  max-width: 600px;
-  width: 600px;
-  min-width: 600px;
-  height: fit-content;
-  margin: 40px 0;
-  padding: 32px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+.guest-form-header {
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.guest-form-title {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: -0.3px;
+}
+
+.guest-form-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+.guest-form-fields {
+  padding: 24px 28px;
   display: grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); /* single column default */
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-
-
-/* Labels */
 .guest-form label {
   display: flex;
   flex-direction: column;
-  font-size: 14px;
+  gap: 8px;
+}
+
+.guest-form-label-text {
+  font-size: 13px;
   font-weight: 600;
-  color: #333;
-  gap: 6px;
+  color: #000000;
+  margin-bottom: 4px;
 }
 
-/* Inputs & Select */
-.guest-form input,
-.guest-form select {
-  color: #1e1e1e;
-  padding: 10px 14px;
+.guest-form label:has(input[name="checkInDate"]) {
+  grid-column: span 1;
+}
+
+.guest-form label:has(input[name="checkOutDate"]) {
+  grid-column: span 1;
+}
+
+.guest-form label:has(select[name="StayTime"]) {
+  grid-column: span 1;
+}
+
+.guest-form label:has(input[name="roomNo"]) {
+  grid-column: span 1;
+}
+
+.guest-form label:has(input[name="customHours"]) {
+  grid-column: span 3;
+}
+
+.reservation-filter-box {
+  flex: 1;
+  min-width: 0;
+  height: fit-content;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.reservation-filter-box:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.reservation-filter-header {
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.reservation-filter-title {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: -0.3px;
+}
+
+.reservation-filter-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+.reservation-filter-content {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.guest-form input {
+  padding: 12px 14px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #d1d5db;
   font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.guest-form input::placeholder {
-  color: #000000 !important;
-  font-family: "Poppins";
+  color: #111827;
+  transition: all 0.2s ease;
+  background: #f9fafb;
+  font-family: "Poppins", sans-serif;
+  flex: 1;
+  width: 100%;
 }
 
-/* Focus state */
+.reservation-filter-box input,
+.reservation-filter-box select {
+  color: #1e1e1e;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid #000000;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  flex: 1;
+  width: 100%;
+}
+
+.guest-form input::placeholder {
+  color: #6b7280;
+  font-family: "Poppins", sans-serif;
+}
+
+.reservation-filter-box input::placeholder {
+  color: #9ca3af !important;
+  font-family: "Poppins", sans-serif;
+}
+
+.guest-form input[readonly] {
+  background: #f9fafb;
+  cursor: not-allowed;
+  color: #6b7280;
+}
+
+.guest-form select {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  color: #111827;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+  font-family: "Poppins", sans-serif;
+}
+
+.guest-form select:focus {
+  outline: none;
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
 .guest-form input:focus,
 .guest-form select:focus {
   outline: none;
-  border-color: #4f46e5; /* Indigo */
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-/* Full width elements */
-.guest-form label.full-width {
+.reservation-filter-box input:focus,
+.reservation-filter-box select:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+}
+
+.guest-form label.full-width ,
+.reservation-filter-box label.full-width {
   grid-column: 1 / -1;
 }
 
-/* Button */
-.guest-form button {
-  grid-column: 1 / -1;
-  padding: 14px;
-  background-color: #4f46e5;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
+.guest-form-submit-btn {
+  margin: 0 28px 24px;
+  padding: 14px 20px;
+  background: #ffffff;
+  color: #374151;
+  border: 2px solid #000000;
+  border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
+  font-family: "Poppins", sans-serif;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 56px);
 }
 
-.guest-form button:hover {
-  background-color: #4338ca;
+.guest-form-submit-btn:hover {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.guest-form button:active {
-  transform: scale(0.98);
+.guest-form-submit-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.guest-form-submit-btn i {
+  font-size: 14px;
 }
 
 .message {
@@ -341,6 +491,12 @@ button:active {
 .message.success {
   color: #16a34a;
 }
+
+/* ============================================
+   DASHBOARD PAGE STYLES
+   Used in: dashboard.jsx
+   ============================================ */
+
 .dashboard-main {
   display: flex;
   gap: 2rem;
@@ -368,7 +524,6 @@ button:active {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
-/* Card-specific colors */
 .total-rooms-available {
   background: linear-gradient(135deg, #fff4e5, #ffe0b2);
   color: #664d03;
@@ -393,25 +548,51 @@ button:active {
   margin: 0;
   letter-spacing: 0.3px;
 }
+
+/* ============================================
+   SHARED TABLE STYLES
+   Used in: reservation.jsx, users.jsx, housekeeping.jsx
+   ============================================ */
+
 .table{
   overflow-x: scroll;
 }
 table {
   color: black;
-  border: 2px solid black;
-      border-collapse: collapse; 
+  border: none;
+  border-collapse: collapse; 
   width: 100%;
+  border-radius: 0;
+}
+
+table thead tr {
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #f8f9fa;
 }
 
 table th,
 table td {
-  border: 2px solid black;
-  padding: 12px 20px;
+  border: none;
+  padding: 20px 20px;
 }
 
-/* ================================
-   SIDEBAR STYLES
-================================ */
+table tbody tr {
+  border-top: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  border-left: none;
+  border-right: none;
+}
+
+table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+/* ============================================
+   SIDEBAR COMPONENT STYLES
+   Used in: sidebar.jsx, layout.jsx
+   ============================================ */
+
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -433,7 +614,8 @@ table td {
 .sidebar-logo-section {
   padding: 24px 20px;
   text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 2px solid rgba(230, 200, 122, 0.15);
+  background: rgba(230, 200, 122, 0.05);
 }
 
 .sidebar-logo {
@@ -443,6 +625,7 @@ table td {
   letter-spacing: 2px;
   margin: 0;
   text-align: left;
+  font-family: "Playfair Display", serif;
 }
 
 .sidebar-subtitle {
@@ -456,7 +639,8 @@ table td {
 
 .sidebar-user-section {
   padding: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 2px solid rgba(230, 200, 122, 0.15);
+  background: rgba(230, 200, 122, 0.03);
 }
 
 .sidebar-user-info {
@@ -468,14 +652,16 @@ table td {
 .sidebar-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 8px;
-  background: #e6c87a;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #e6c87a 0%, #c6a15b 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   font-weight: 600;
   color: #1a1a1a;
+  box-shadow: 0 2px 8px rgba(230, 200, 122, 0.3);
+  border: 1px solid rgba(230, 200, 122, 0.4);
 }
 
 .sidebar-user-details {
@@ -512,8 +698,8 @@ table td {
 
 .sidebar-link {
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.8);
-  padding: 12px 20px;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 14px 20px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -521,13 +707,16 @@ table td {
   font-weight: 500;
   background: transparent;
   border-left: 3px solid transparent;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   position: relative;
+  margin: 2px 8px;
+  border-radius: 8px;
 }
 
 .sidebar-link:hover {
   background: rgba(255, 255, 255, 0.05);
   color: #ffffff;
+  transform: translateX(2px);
 }
 
 .sidebar-link.active {
@@ -539,50 +728,62 @@ table td {
 
 .sidebar-link.active:hover {
   background: rgba(230, 200, 122, 0.1);
+  transform: translateX(2px);
 }
 
 .sidebar-icon {
   font-size: 16px;
   width: 20px;
   text-align: center;
-  opacity: 0.7;
+  opacity: 0.75;
+  transition: all 0.2s ease;
+}
+
+.sidebar-link:hover .sidebar-icon {
+  opacity: 1;
 }
 
 .sidebar-link.active .sidebar-icon {
   opacity: 1;
+  color: #e6c87a;
 }
 
 .sidebar-footer {
   padding: 16px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 2px solid rgba(230, 200, 122, 0.15);
+  background: rgba(230, 200, 122, 0.03);
 }
 
 .sidebar-logout-btn {
   width: 100%;
   padding: 12px 16px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 500;
+  border: 2px solid rgba(230, 200, 122, 0.3);
+  background: rgba(230, 200, 122, 0.1);
+  color: #e6c87a;
+  font-weight: 600;
   cursor: pointer;
   font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .sidebar-logout-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(230, 200, 122, 0.2);
+  border-color: rgba(230, 200, 122, 0.5);
   color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(230, 200, 122, 0.3);
 }
 
-/* ================================
-   LAYOUT STYLES
-================================ */
+/* ============================================
+   LAYOUT COMPONENT STYLES
+   Used in: layout.jsx
+   ============================================ */
+
 .app-layout {
   display: flex;
   height: 100vh;
@@ -599,7 +800,7 @@ table td {
   margin-left: 300px;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 2rem;
+  padding: 2rem 0rem;
   box-sizing: border-box;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -609,18 +810,16 @@ table td {
   display: none;
 }
 
-/* ================================
-   DASHBOARD STYLES
-================================ */
 .dashboard-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
-  padding: 16px 18px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #f8f5ee, #e8dfcb);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f8f5ee 0%, #e8dfcb 100%);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  border: 2px solid rgba(0,0,0,0.1);
 }
 
 .dashboard-welcome-text {
@@ -655,50 +854,72 @@ table td {
 
 .dashboard-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
 }
 
 .stat-card {
-  background: #fdf6e3;
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.06);
-  border: 1px solid rgba(0,0,0,0.03);
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.06);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  gap: 16px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, currentColor, transparent);
+  opacity: 0.3;
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 32px rgba(0,0,0,0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .stat-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 4px;
 }
 
 .stat-card-title {
   margin: 0;
-  color: #514734;
+  color: #000000;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .stat-card-icon {
-  font-size: 24px;
-  color: #514734;
+  font-size: 28px;
+  opacity: 0.8;
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover .stat-card-icon {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .stat-card-value {
   display: block;
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 800;
-  color: #1f130a;
+  line-height: 1.2;
+  letter-spacing: -1px;
 }
 
 .loading-state {
@@ -712,14 +933,21 @@ table td {
   color: #666;
 }
 
-/* ================================
-   ROOMS PAGE STYLES
-================================ */
+/* ============================================
+   ROOMS PAGE STYLES (continued)
+   Used in: rooms.jsx
+   ============================================ */
+
 .rooms-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  border: 2px solid rgba(0,0,0,0.1);
   color: #1b1b1b;
 }
 
@@ -735,19 +963,27 @@ table td {
 
 .rooms-badges {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
   font-size: 12px;
   color: #333;
+  flex-wrap: wrap;
 }
 
 .room-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 8px;
+  padding: 6px 12px;
   border-radius: 12px;
   background: rgba(0,0,0,0.05);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.room-badge:hover {
+  background: rgba(0,0,0,0.08);
+  transform: translateY(-1px);
 }
 
 .room-badge-dot {
@@ -767,7 +1003,12 @@ table td {
 }
 
 .rooms-floor-title {
-  margin-top: 20px;
+  margin-top: 24px;
+  padding-top: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: -0.3px;
 }
 
 .room-tag {
@@ -787,16 +1028,22 @@ table td {
   color: #fff;
 }
 
+/* ============================================
+   RESERVATION PAGE STYLES (continued)
+   Used in: reservation.jsx
+   ============================================ */
 
-/* ================================
-   RESERVATION PAGE STYLES
-================================ */
 .reservation-header {
   color: #111;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  border: 2px solid rgba(0,0,0,0.1);
   gap: 10px;
 }
 
@@ -849,7 +1096,7 @@ table td {
   padding: 6px 12px;
   border-radius: 20px;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .reservation-status-badge.checked-in {
@@ -862,6 +1109,8 @@ table td {
   background: #ffebee;
   color: #f44336;
   border: 1px solid #f4433620;
+  font-size: 10px;
+    width: 112px;
 }
 
 .reservation-stay-badge {
@@ -883,7 +1132,12 @@ table td {
 
 .reservation-charge {
   font-weight: 600;
-  color: #e6c87a;
+  background-color: #ffb700;
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .checkout-button {
@@ -919,17 +1173,55 @@ table td {
 }
 
 .reservation-success {
-  color: green;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+  color: #ffffff;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  z-index: 1000;
+  animation: slideInRight 0.3s ease-out;
+  min-width: 250px;
 }
 
-/* ================================
+.reservation-success i {
+  font-size: 20px;
+  color: #ffffff;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================
    HOUSEKEEPING PAGE STYLES
-================================ */
+   Used in: housekeeping.jsx
+   ============================================ */
+
 .housekeeping-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  border: 2px solid rgba(0,0,0,0.1);
   color: #1b1b1b;
 }
 
@@ -944,26 +1236,36 @@ table td {
 }
 
 .housekeeping-badge {
-  background: #f2efe7;
-  padding: 10px 16px;
+  background: linear-gradient(135deg, #f2efe7 0%, #e8dfcb 100%);
+  padding: 12px 20px;
   border-radius: 12px;
   font-weight: 600;
   color: #5a4b2e;
   font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+}
+
+.housekeeping-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
 .housekeeping-badge i {
   margin-right: 8px;
 }
 
-/* ================================
-   USERS PAGE STYLES
-================================ */
 .users-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  border: 2px solid rgba(0,0,0,0.1);
   color: #1b1b1b;
 }
 
@@ -976,6 +1278,11 @@ table td {
   color: #555;
   font-size: 14px;
 }
+
+/* ============================================
+   USERS PAGE STYLES
+   Used in: users.jsx
+   ============================================ */
 
 .loading-container {
   display: flex;
@@ -1003,22 +1310,31 @@ table td {
   border: 1px solid #f57c0020;
 }
 
+/* ============================================
+   HOUSEKEEPING PAGE STYLES (continued)
+   Used in: housekeeping.jsx
+   ============================================ */
+
 .housekeeping-table-container {
   background: #ffffff;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  border: 2px solid rgba(0,0,0,0.1);
+  border-radius: 0;
+  margin-top: 24px;
 }
 
 .housekeeping-table {
   width: 100%;
   border-collapse: collapse;
   color: #1b1b1b;
+  border: none;
 }
 
 .housekeeping-table thead tr {
   background: #f8f9fa;
-  border-bottom: 2px solid #e9ecef;
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
 }
 
 .housekeeping-table th {
@@ -1029,10 +1345,14 @@ table td {
   color: #495057;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  border: none;
 }
 
 .housekeeping-table tbody tr {
-  border-bottom: 1px solid #e9ecef;
+  border-top: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  border-left: none;
+  border-right: none;
   transition: background 0.15s ease;
 }
 
@@ -1044,6 +1364,7 @@ table td {
   padding: 16px 20px;
   font-size: 14px;
   color: #1b1b1b;
+  border: none;
 }
 
 .housekeeping-table td strong {
@@ -1137,47 +1458,135 @@ table td {
   color: #999;
 }
 
-/* ================================
-   RESERVATION FILTER STYLES
-================================ */
+/* ============================================
+   SHARED FILTER & FORM STYLES
+   Used in: reservation.jsx, users.jsx, housekeeping.jsx
+   ============================================ */
+
 .reservation-filter-container {
   color: black;
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 24px;
+  margin: 24px 0;
+  align-items: flex-start;
 }
 
-.reservation-filter-row {
+.reservation-form-container-single {
+  margin: 24px 0;
+  width: 100%;
+}
 
+.reservation-form-container-single .guest-form {
+  width: 100%;
+}
+
+.reservation-filter-container-single {
+  margin: 24px 0;
+  width: 100%;
+}
+
+.reservation-filter-container-single .reservation-filter-box {
+  width: 100%;
+  max-width: 100%;
+}
+
+.reservation-toggle-btn {
+  padding: 8px 16px;
+  border: 2px solid #000000;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  min-width: 100px;
+  background: #ffffff;
+  color: #374151;
+  height: 50px;
+    width: fit-content;
+    border-radius: 50px;
+
+}
+
+.reservation-toggle-btn:hover {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.reservation-toggle-btn:active {
+  transform: translateY(0);
+}
+
+.reservation-toggle-btn i {
+  font-size: 11px;
 }
 
 .reservation-filter-section {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   flex: 1;
+  min-width: 200px;
+  max-width: 300px;
 }
 
-.reservation-filter-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #333;
+.reservation-filter-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.reservation-filter-icon {
+  font-size: 16px;
+  color: #000000;
+  min-width: 20px;
+  text-align: center;
 }
 
 .reservation-filter-select {
-  height: 40px;
+  height: 48px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid #000000;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background: #ffffff;
+  color: #1e1e1e;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  flex: 1;
+}
+
+.reservation-filter-select:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .reservation-search-input {
-  margin-bottom: 10px;
-  padding: 6px 10px;
-  width: 100%;
+  padding: 12px 16px;
+  flex: 1;
   height: 48px;
-  color: black;
+  color: #1e1e1e;
+  border-radius: 10px;
+  border: 2px solid #000000;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.reservation-search-input:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .reservation-message {
@@ -1188,12 +1597,11 @@ table td {
   color: red;
 }
 
-.reservation-success {
-  color: green;
-}
-
 .reservation-table-row {
-  border-bottom: 1px solid #e9ecef;
+  border-top: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  border-left: none;
+  border-right: none;
 }
 
 .reservation-table-row:hover {
@@ -1210,14 +1618,13 @@ table td {
   font-style: italic;
 }
 
-/* ================================
-   TABLE STYLES (Updated)
-================================ */
 .professional-table-container {
   background: #ffffff;
   overflow-x: scroll;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  border: 2px solid rgba(0,0,0,0.1);
+  border-radius: 0;
+  margin-top: 24px;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -1241,13 +1648,15 @@ table td {
 
 .professional-table {
   width: 100%;
-  /* border-collapse: collapse; */
+  border-collapse: collapse;
   color: #1b1b1b;
+  border: none;
 }
 
 .professional-table thead tr {
   background: #f8f9fa;
-  border-bottom: 2px solid #e9ecef;
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
 }
 
 .professional-table th {
@@ -1258,10 +1667,14 @@ table td {
   color: #495057;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  border: none;
 }
 
 .professional-table tbody tr {
-  border-bottom: 1px solid #e9ecef;
+  border-top: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  border-left: none;
+  border-right: none;
   transition: background 0.15s ease;
 }
 
@@ -1270,35 +1683,48 @@ table td {
 }
 
 .professional-table td {
-  padding: 16px 20px;
+  padding: 20px 20px;
   font-size: 14px;
   color: #1b1b1b;
+  border: none;
 }
-/* Card container */
+
+/* ============================================
+   USER FORM STYLES
+   Used in: users.jsx, rooms.jsx
+   ============================================ */
+
 .user-form-card {
-  margin: 30px 0px;
+  margin: 24px 0px;
   background: #ffffff;
-  padding: 25px 30px;
-  border-radius: 12px;
-  max-width: 600px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 28px 32px;
+  border-radius: 16px;
+  max-width: 700px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease;
 }
 
-/* Title */
+.user-form-card:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
 .user-form-card h2 {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   font-size: 22px;
+  font-weight: 700;
   color: #1f2937;
+  letter-spacing: -0.3px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-/* Grid layout */
 .user-form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 15px;
 }
 
-/* Inputs */
 .user-form-grid input {
   padding: 12px 14px;
   border-radius: 8px;
@@ -1309,13 +1735,11 @@ table td {
   background: #f9fafb;
 }
 
-/* Placeholder */
 .user-form-grid input::placeholder {
   color: #6b7280;
   font-family: "Poppins", sans-serif;
 }
 
-/* Focus state */
 .user-form-grid input:focus {
   outline: none;
   border-color: #2563eb;
@@ -1323,28 +1747,36 @@ table td {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-/* Button */
 .create-user-btn {
   margin-top: 25px;
   width: 100%;
-  padding: 12px;
+  padding: 14px 20px;
   border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: white;
+  border: 2px solid #000000;
+  background: #ffffff;
+  color: #374151;
   font-size: 15px;
   font-weight: 600;
+  font-family: "Poppins", sans-serif;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-/* Button hover */
 .create-user-btn:hover {
+  background: #f3f4f6;
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Button icon */
+.create-user-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
 .create-user-btn i {
   margin-right: 8px;
 }
@@ -1366,14 +1798,10 @@ table td {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
+/* ============================================
+   RESPONSIVE MEDIA QUERIES
+   ============================================ */
 
-
-
-/* ================================
-   RESPONSIVE
-================================ */
-
-/* Tablet Styles (max-width: 1024px) */
 @media (max-width: 1024px) {
   .app-layout {
     gap: 2%;
@@ -1389,7 +1817,6 @@ table td {
     width: 240px;
   }
 
-  /* Dashboard */
   .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
@@ -1410,7 +1837,6 @@ table td {
     padding: 16px;
   }
 
-  /* Tables */
   .professional-table-container {
     overflow-x: auto;
   }
@@ -1427,7 +1853,6 @@ table td {
     min-width: 800px;
   }
 
-  /* Reservation */
   .reservation-header {
     flex-direction: column;
     align-items: flex-start;
@@ -1438,16 +1863,41 @@ table td {
     flex-wrap: wrap;
   }
 
-  .reservation-filter-container {
+.reservation-filter-container {
     flex-direction: column;
     gap: 20px;
   }
 
-  .guest-form {
+  .guest-form,
+  .reservation-filter-box {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .guest-form-fields {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .guest-form label:has(input[name="checkInDate"]),
+  .guest-form label:has(input[name="checkOutDate"]),
+  .guest-form label:has(select[name="StayTime"]),
+  .guest-form label:has(input[name="roomNo"]) {
+    grid-column: span 1;
+  }
+
+  .guest-form label:has(input[name="customHours"]) {
+    grid-column: span 2;
+  }
+
+  .reservation-filter-content {
+    flex-direction: column;
+  }
+
+  .reservation-filter-section {
+    min-width: 100%;
     max-width: 100%;
   }
 
-  /* Rooms */
   .rooms-header {
     flex-direction: column;
     align-items: flex-start;
@@ -1462,14 +1912,12 @@ table td {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
 
-  /* Housekeeping */
   .housekeeping-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
 
-  /* Users */
   .users-header {
     flex-direction: column;
     align-items: flex-start;
@@ -1477,8 +1925,21 @@ table td {
   }
 }
 
-/* Small Mobile Styles (max-width: 480px) */
 @media (max-width: 730px) {
+  .guest-form-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .guest-form label:has(input[name="checkInDate"]),
+  .guest-form label:has(input[name="checkOutDate"]),
+  .guest-form label:has(select[name="StayTime"]),
+  .guest-form label:has(input[name="roomNo"]),
+  .guest-form label:has(input[name="customHours"]) {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 480px) {
   .login-form {
     width: 100%;
     margin: 1rem;

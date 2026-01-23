@@ -2,9 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Room = require('../models/roomsModel');
 const authorizeRoles = require('../middleware/authorizeRoles');
-const { route } = require('./reservationRoutes');
 
-//create multiple rooms with floors
+// Creates multiple rooms for a specific floor
 router.post('/createrooms', async(req,res)=>{
         const createRooms = [];
         const {floor,rooms} = req.body;
@@ -32,6 +31,8 @@ router.post('/createrooms', async(req,res)=>{
         }
         
 })
+
+// Gets all rooms in the system
 router.get('/allrooms', async(req,res)=>{
     try{
         const rooms =  await Room.find();
@@ -41,6 +42,8 @@ router.get('/allrooms', async(req,res)=>{
         res.status(500).json({ message: err.message });
     }
 });
+
+// Gets all unique floor numbers that have rooms
 router.get('/allfloors',async(req,res)=>{
     try{
         const floors = await Room.distinct("floor")
@@ -51,6 +54,7 @@ router.get('/allfloors',async(req,res)=>{
     }
 })
 
+// Gets all rooms of a specific type (single, double, suite)
 router.get('/type/:roomType', async(req,res)=>{
     try{
         const rooms =  await Room.find({roomType: req.params.roomType});
@@ -60,6 +64,8 @@ router.get('/type/:roomType', async(req,res)=>{
         res.status(500).json({ message: err.message });
     }
 })
+
+// Gets a single room by its room number
 router.get('/room/:roomNo', async(req,res)=>{
     try{
         const room =  await Room.findOne({roomNo: req.params.roomNo});
@@ -72,6 +78,8 @@ router.get('/room/:roomNo', async(req,res)=>{
         res.status(500).json({ message: err.message });
     }   
 });
+
+// Gets all rooms on a specific floor
 router.get('/floor/:floor', async(req,res)=>{
     try{
         const rooms =  await Room.find({floor: req.params.floor});
@@ -81,6 +89,8 @@ router.get('/floor/:floor', async(req,res)=>{
         res.status(500).json({ message: err.message });
     }
 });
+
+// Updates room details (status, floor, room number, or room type)
 router.put('/updateroom/:roomNo', async(req,res)=>{
     const {status, floor, roomNo, roomType} = req.body;
     try{
@@ -89,7 +99,6 @@ router.put('/updateroom/:roomNo', async(req,res)=>{
             return res.status(404).json({ message: 'Room not found' });
         }
         
-        // If roomNo is being changed, check if new roomNo already exists
         if(roomNo && roomNo !== req.params.roomNo){
             const existingRoom = await Room.findOne({roomNo: roomNo});
             if(existingRoom){
@@ -97,7 +106,6 @@ router.put('/updateroom/:roomNo', async(req,res)=>{
             }
         }
         
-        // Update fields if provided
         if(status !== undefined){
             if(!['available', 'occupied', 'cleaning_needed', 'under_maintenance'].includes(status)){
                 return res.status(400).json({ message: 'Invalid status value' });
@@ -130,4 +138,53 @@ router.put('/updateroom/:roomNo', async(req,res)=>{
         res.status(500).json({ message: err.message });
     }
 });
+
+// Deletes a single room by room number
+router.delete('/deleteroom/:roomNo', async(req,res)=>{
+    try{
+        const room = await Room.findOneAndDelete({roomNo: req.params.roomNo});
+        if(!room){
+            return res.status(404).json({ message: 'Room not found' });
+        }
+        res.status(200).json({ message: 'Room deleted successfully', room });
+    }
+    catch(err){
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Deletes multiple rooms at once by providing an array of room numbers
+router.delete('/deleterooms', async(req,res)=>{
+    try{
+        const { roomNos } = req.body;
+        if(!roomNos || !Array.isArray(roomNos) || roomNos.length === 0){
+            return res.status(400).json({ message: 'roomNos array is required' });
+        }
+        
+        const result = await Room.deleteMany({ roomNo: { $in: roomNos } });
+        res.status(200).json({ 
+            message: `${result.deletedCount} room(s) deleted successfully`,
+            deletedCount: result.deletedCount 
+        });
+    }
+    catch(err){
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Deletes all rooms on a specific floor
+router.delete('/deletefloor/:floor', async(req,res)=>{
+    try{
+        const floor = req.params.floor;
+        const result = await Room.deleteMany({ floor: floor });
+        res.status(200).json({ 
+            message: `Floor ${floor} deleted successfully. ${result.deletedCount} room(s) removed`,
+            deletedCount: result.deletedCount 
+        });
+    }
+    catch(err){
+        res.status(500).json({ message: err.message });
+    }
+});
+
 module.exports = router;

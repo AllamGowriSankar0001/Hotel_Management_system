@@ -18,8 +18,7 @@ function useFetch(url){
             setData(res);
                }
                catch(err){
-                // setError();
-  setError(err.message || "Something went wrong"); // ✅
+  setError(err.message || "Something went wrong");
 
                }
                finally{

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { verifyToken } from "../services/auth";
 
 function Housekeeping() {
+  const navigate = useNavigate();
+
   const [cleaningList, setCleaningList] = useState([]);
   const [cleanerslist, setCleanerslist] = useState([]);
   const [cleanStart, setCleanStart] = useState({
@@ -11,9 +13,13 @@ function Housekeeping() {
     assignedTo: "",
     status: "IN_PROGRESS",
   });
+  const [showFilter, setShowFilter] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
+  const [cleanerFilter, setCleanerFilter] = useState("");
+  const [roomNoFilter, setRoomNoFilter] = useState("");
 
-  const navigate = useNavigate();
-
+  // Fetches all users and filters for cleaners only
   async function fetchusersdata() {
     try {
       const users = await fetch("https://hotel-management-system-2spj.onrender.com/api/users/allusers");
@@ -25,6 +31,7 @@ function Housekeeping() {
     }
   }
 
+  // Fetches all cleaning tasks from the API
   async function allcleanings() {
     try {
       const fetchdata = await fetch(
@@ -37,8 +44,8 @@ function Housekeeping() {
     }
   }
 
+  // Starts a cleaning task for a specific room and assigns a cleaner
   async function startCleaning(roomNo) {
-    // console.log("Clean start data:", cleanStart);
     try {
       const userdata = JSON.parse(localStorage.getItem("userdata")) || {};
       const token = userdata.token;
@@ -59,7 +66,6 @@ function Housekeeping() {
       );
       const data = await res.json();
       if (res.ok) {
-        // // console.log("Cleaning started successfully:", data);
         allcleanings();
       } else {
         console.error("Error starting cleaning:", data.message);
@@ -69,6 +75,7 @@ function Housekeeping() {
     }
   }
 
+  // Marks a cleaning task as completed for a specific room
   async function completeCleaning(roomNo) {
     try {
       const userdata = JSON.parse(localStorage.getItem("userdata")) || {};
@@ -89,7 +96,6 @@ function Housekeeping() {
       );
       const data = await res.json();
       if (res.ok) {
-        // console.log("Cleaning completed successfully:", data);
         allcleanings();
       } else {
         console.error("Error completing cleaning:", data.message);
@@ -99,11 +105,11 @@ function Housekeeping() {
     }
   }
 
+  // Verifies user authentication and loads initial data on component mount
   useEffect(() => {
     async function init() {
       const result = await verifyToken();
       if (!result.ok) {
-        // token invalid or missing -> redirect to login
         return navigate("/login");
       }
       fetchusersdata();
@@ -111,6 +117,21 @@ function Housekeeping() {
     }
     init();
   }, []);
+
+  // Filters cleaning tasks based on status, date, cleaner name, and room number
+  const filteredCleanings = cleaningList.filter((cleaning) => {
+    const matchesStatus = !statusFilter || cleaning.status === statusFilter || 
+      (statusFilter === "cleaning_needed" && cleaning.status === "cleaning_needed");
+    const matchesDate = !dateFilter || 
+      (cleaning.assignedAt && new Date(cleaning.assignedAt).toLocaleDateString() === new Date(dateFilter).toLocaleDateString()) ||
+      (cleaning.completedAt && new Date(cleaning.completedAt).toLocaleDateString() === new Date(dateFilter).toLocaleDateString());
+    const matchesCleaner = !cleanerFilter || 
+      (cleaning.assignedTo && cleaning.assignedTo.toLowerCase().includes(cleanerFilter.toLowerCase()));
+    const matchesRoomNo = !roomNoFilter || 
+      (cleaning.roomNo && cleaning.roomNo.toLowerCase().includes(roomNoFilter.toLowerCase()));
+    
+    return matchesStatus && matchesDate && matchesCleaner && matchesRoomNo;
+  });
 
   return (
     <>
@@ -121,11 +142,83 @@ function Housekeeping() {
             Track cleaning status and assign cleaners.
           </p>
         </div>
-        <div className="housekeeping-badge">
-          <i className="fas fa-user-hard-hat"></i>
-          Cleaners: {cleanerslist.length}
+        <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+          <button
+            type="button"
+            onClick={() => setShowFilter(!showFilter)}
+            className="reservation-toggle-btn"
+            style={{
+              background: showFilter ? "#000000" : "#ffffff",
+              color: showFilter ? "#ffffff" : "#374151",
+              borderColor: "#000000",
+              padding: "12px 20px",
+              fontSize: "14px",
+              height: "auto",
+              lineHeight: "1.5",
+            }}
+          >
+            <i className={`fas ${showFilter ? "fa-filter-circle-xmark" : "fa-filter"}`}></i>
+            {showFilter ? "Hide Filter" : "Filter"}
+          </button>
+          <div className="housekeeping-badge">
+            <i className="fas fa-user-hard-hat"></i>
+            Cleaners: {cleanerslist.length}
+          </div>
         </div>
       </div>
+
+      {showFilter && (
+        <div className="reservation-filter-box">
+          <div className="reservation-filter-content">
+            <div className="reservation-filter-section">
+              <i className="fas fa-filter reservation-filter-icon"></i>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                style={{ flex: 1 }}
+              >
+                <option value="">All Status</option>
+                <option value="cleaning_needed">Cleaning Needed</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="COMPLETED">Completed</option>
+              </select>
+            </div>
+
+            <div className="reservation-filter-section">
+              <i className="fas fa-calendar reservation-filter-icon"></i>
+              <input
+                type="date"
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+                placeholder="Filter by Date"
+                style={{ flex: 1 }}
+              />
+            </div>
+
+            <div className="reservation-filter-section">
+              <i className="fas fa-user reservation-filter-icon"></i>
+              <input
+                type="text"
+                value={cleanerFilter}
+                onChange={(e) => setCleanerFilter(e.target.value)}
+                placeholder="Filter by Cleaner Name"
+                style={{ flex: 1 }}
+              />
+            </div>
+
+            <div className="reservation-filter-section">
+              <i className="fas fa-door-open reservation-filter-icon"></i>
+              <input
+                type="text"
+                value={roomNoFilter}
+                onChange={(e) => setRoomNoFilter(e.target.value)}
+                placeholder="Filter by Room No"
+                style={{ flex: 1 }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="housekeeping-table-container">
         <table className="housekeeping-table">
@@ -140,8 +233,8 @@ function Housekeeping() {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(cleaningList) && cleaningList.length > 0 ? (
-              cleaningList.map((cleaning, index) => (
+            {Array.isArray(filteredCleanings) && filteredCleanings.length > 0 ? (
+              filteredCleanings.map((cleaning, index) => (
                 <tr key={cleaning._id || index}>
                   <td>
                     <strong>{cleaning.roomNo}</strong>

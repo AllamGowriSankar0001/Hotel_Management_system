@@ -4,11 +4,14 @@ const Cleaning = require('../models/cleaningModel');
 const Room = require('../models/roomsModel');
 const authorizeRoles = require('../middleware/authorizeRoles');
 const verifyToken = require('../middleware/verifytoken');
-// Create a cleaning record
+
+// Gets all cleaning tasks in the system
 router.get('/allcleanings', async (req, res) => {
     const cleanings = await Cleaning.find();
     res.status(200).json(cleanings);
 })
+
+// Starts a cleaning task for a room and assigns a cleaner (admin and reception only)
 router.post(
   '/startcleaning/:roomNo',
   verifyToken,
@@ -44,6 +47,7 @@ router.post(
   }
 );
 
+// Marks a cleaning task as completed and sets room status to available (admin and reception only)
 router.post('/completecleaning/:roomNo', verifyToken, authorizeRoles('admin','reception'), async (req, res) => {
     try{
         const { roomNo } = req.params;
@@ -65,4 +69,5 @@ router.post('/completecleaning/:roomNo', verifyToken, authorizeRoles('admin','re
         res.status(500).json({ message: err.message });
     }
 })
+
 module.exports = router;

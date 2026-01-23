@@ -6,7 +6,7 @@ const User = require('../models/userModel');
 const authorizeRoles = require('../middleware/authorizeRoles');
 const verifyToken = require('../middleware/verifytoken');
 
-// Get all users
+// Gets all users in the system
 router.get('/allusers', async (req, res) => {
     try {
         const users = await User.find();
@@ -15,7 +15,8 @@ router.get('/allusers', async (req, res) => {
         res.status(401).json({ message: err.message });
     }
 });
-// Get users by role
+
+// Gets all users with a specific role
 router.get('/role/:role',verifyToken, async (req, res) => {
     try {
         const users = await User.find({ role: req.params.role });
@@ -25,7 +26,7 @@ router.get('/role/:role',verifyToken, async (req, res) => {
     }
 });
 
-// Get user by ID
+// Gets a single user by their ID
 router.get('/user/:id',verifyToken, async (req, res) => {
     try {
         const user = await User.findOne({ id: req.params.id });
@@ -37,7 +38,8 @@ router.get('/user/:id',verifyToken, async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
-// Create a new user
+
+// Creates a new user (admin only)
 router.post('/createuser',verifyToken,authorizeRoles("admin"), async (req, res) => {
     const { name, email, phone, password, role } = req.body || {};
     const finduser = await User.findOne({ phone: phone });
@@ -66,7 +68,8 @@ router.post('/createuser',verifyToken,authorizeRoles("admin"), async (req, res) 
         res.status(400).json({ message: err.message });
     }
 });
-// Update user by ID
+
+// Updates user information (name, email, phone)
 router.put('/updateuser/:id',verifyToken, async (req, res) => {
     const { name, email, phone } = req.body;
     try {
@@ -83,7 +86,8 @@ router.put('/updateuser/:id',verifyToken, async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
-// update user password
+
+// Updates a user's password
 router.put('/updatepassword/:id',verifyToken,async(req,res)=>{
     const {newPassword} = req.body || {};
     if(!newPassword){
@@ -103,7 +107,8 @@ router.put('/updatepassword/:id',verifyToken,async(req,res)=>{
     }
 
 });
-// User login
+
+// Handles user login and returns JWT token
 router.post('/login', async(req,res)=>{
     const {id,password} = req.body || {};
     if(!id || !password){
@@ -124,16 +129,17 @@ router.post('/login', async(req,res)=>{
         res.status(500).json({message:err.message});
     }
 });
-// Verify token endpoint
+
+// Verifies if a JWT token is valid
 router.get('/verify', verifyToken, async (req, res) => {
     try {
-        // req.user is set by verifyToken middleware
         res.status(200).json({ message: 'Token valid', user: req.user });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
-// Delete user by ID
+
+// Deletes a user from the system
 router.delete('/deleteuser/:id',verifyToken,async(req,res)=>{
     const userId = req.params.id;
     try{
@@ -147,4 +153,5 @@ router.delete('/deleteuser/:id',verifyToken,async(req,res)=>{
         res.status(500).json({message:err.message});
     }
 });
+
 module.exports = router;

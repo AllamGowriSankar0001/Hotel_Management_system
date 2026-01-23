@@ -3,25 +3,6 @@ import { Navigate } from "react-router-dom";
 import "../App.css";
 
 function Users() {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [userfromshow, setUserfromshow] = useState(false);
-  const [createUser, setCreateUser] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-    role: "",
-  });
-  const [updateUserData, setUpdateUserData] = useState(
-    {
-      name: "",
-      email: "",
-      phone: "",
-    }
-  )
-  const [editingUserId, setEditingUserId] = useState(null);
-
   const userdata = JSON.parse(localStorage.getItem("userdata"));
   if (!userdata) {
     return <Navigate to="/login" />;
@@ -29,28 +10,28 @@ function Users() {
 
   const userRole = userdata?.user?.role || "Staff";
   const isAdmin = userRole?.toLowerCase() === "admin";
-  async function deleteUser(userId, token) {
-    const confirmDelete = await fetch(
-      `https://hotel-management-system-2spj.onrender.com/api/users/deleteuser/${userId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (confirmDelete.ok) {
-      fetchUsers();
-    } else {
-      console.error("Error deleting user");
-    }
-  }
-  useEffect(() => {
-    if (isAdmin) {
-      fetchUsers();
-    }
-  }, [isAdmin]);
 
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [userfromshow, setUserfromshow] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+  const [searchName, setSearchName] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [createUser, setCreateUser] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    role: "",
+  });
+  const [updateUserData, setUpdateUserData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+  const [editingUserId, setEditingUserId] = useState(null);
+
+  // Fetches all users from the API
   async function fetchUsers() {
     try {
       setLoading(true);
@@ -63,37 +44,8 @@ function Users() {
       setLoading(false);
     }
   }
-  async function updateUser(id) {
-    try {
-      // console.log("Updating user:", id, updateUserData);
-      const res = await fetch(`https://hotel-management-system-2spj.onrender.com/api/users/updateuser/${id}`,{
-        method:"PUT",
-        headers:{
-          "Content-Type":"application/json",
-          Authorization:`Bearer ${userdata.token}`
-        },
-        body:JSON.stringify(updateUserData)
-      });
-      const data = await res.json();
-      // console.log("Update response:", data);
-      
-      if (!res.ok) {
-          alert(data.message || "Error updating user");
-          return;
-        }
 
-        alert("User updated successfully!");
-        setUpdateUserData({
-          name: "",
-          email: "",
-          phone: ""
-        });
-        setEditingUserId(null);
-        fetchUsers();
-    } catch (error) {
-      alert("Error: " + error.message);
-    }
-  }
+  // Creates a new user with the provided details
   async function addUser() {
     try {
       const newUser = await fetch(`https://hotel-management-system-2spj.onrender.com/api/users/createuser`, {
@@ -126,9 +78,77 @@ function Users() {
     }
   }
 
+  // Updates an existing user's information
+  async function updateUser(id) {
+    try {
+      const res = await fetch(`https://hotel-management-system-2spj.onrender.com/api/users/updateuser/${id}`,{
+        method:"PUT",
+        headers:{
+          "Content-Type":"application/json",
+          Authorization:`Bearer ${userdata.token}`
+        },
+        body:JSON.stringify(updateUserData)
+      });
+      const data = await res.json();
+      
+      if (!res.ok) {
+          alert(data.message || "Error updating user");
+          return;
+        }
+
+        alert("User updated successfully!");
+        setUpdateUserData({
+          name: "",
+          email: "",
+          phone: ""
+        });
+        setEditingUserId(null);
+        fetchUsers();
+    } catch (error) {
+      alert("Error: " + error.message);
+    }
+  }
+
+  // Deletes a user from the system
+  async function deleteUser(userId, token) {
+    const confirmDelete = await fetch(
+      `https://hotel-management-system-2spj.onrender.com/api/users/deleteuser/${userId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (confirmDelete.ok) {
+      fetchUsers();
+    } else {
+      console.error("Error deleting user");
+    }
+  }
+
+  // Fetches users when component mounts and user is admin
+  useEffect(() => {
+    if (isAdmin) {
+      fetchUsers();
+    }
+  }, [isAdmin]);
+
   if (!isAdmin) {
     return <Navigate to="/dashboard" />;
   }
+
+  // Filters users based on name search and role selection
+  const filteredUsers = users.filter((user) => {
+    const matchesName = searchName === "" || 
+      user.name?.toLowerCase().includes(searchName.toLowerCase()) ||
+      user.id?.toString().includes(searchName);
+    
+    const matchesRole = roleFilter === "all" || 
+      user.role?.toLowerCase() === roleFilter.toLowerCase();
+    
+    return matchesName && matchesRole;
+  });
 
   return (
     <div className="content1">
@@ -137,17 +157,79 @@ function Users() {
           <h1>Users Management</h1>
           <p>Manage all system users and their roles</p>
         </div>
-        <div>
-          <button onClick={()=>{setUserfromshow(!userfromshow)}}>
-            <i className="fa-solid fa-plus" style={{ marginRight: "5px" }}>
-              {" "}
-            </i>{" "}
-            Add User
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <button
+            type="button"
+            onClick={() => setShowFilter(!showFilter)}
+            className="reservation-toggle-btn"
+            style={{
+              background: showFilter ? "#000000" : "#ffffff",
+              color: showFilter ? "#ffffff" : "#374151",
+              borderColor: showFilter ? "#000000" : "#000000",
+            }}
+          >
+            <i className={`fas ${showFilter ? "fa-times" : "fa-filter"}`}></i>
+            {showFilter ? "Hide" : "Filter"}
+          </button>
+          <button 
+            type="button"
+            onClick={()=>{setUserfromshow(!userfromshow)}}
+            className="reservation-toggle-btn"
+            style={{
+              background: userfromshow ? "#000000" : "#ffffff",
+              color: userfromshow ? "#ffffff" : "#374151",
+              borderColor: userfromshow ? "#000000" : "#000000",
+            }}
+          >
+            <i className={`fa-solid ${userfromshow ? "fa-times" : "fa-plus"}`}></i>
+            {userfromshow ? "Hide" : "Add User"}
           </button>
         </div>
       </div>
-      { userfromshow ?
 
+      {showFilter && (
+        <div className="reservation-filter-container-single">
+          <div className="reservation-filter-box">
+            <div className="reservation-filter-header">
+              <h2 className="reservation-filter-title">Filter & Search</h2>
+              <p className="reservation-filter-subtitle">Search and filter users</p>
+            </div>
+            
+            <div className="reservation-filter-content">
+              <div className="reservation-filter-section">
+                <div className="reservation-filter-input-wrapper">
+                  <i className="fas fa-search reservation-filter-icon"></i>
+                  <input
+                    type="text"
+                    className="reservation-search-input"
+                    placeholder="Search by user name"
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+                  />
+                </div>
+              </div>
+              
+              <div className="reservation-filter-section">
+                <div className="reservation-filter-input-wrapper">
+                  <i className="fas fa-user-tag reservation-filter-icon"></i>
+                  <select
+                    className="reservation-filter-select"
+                    value={roleFilter}
+                    onChange={(e) => setRoleFilter(e.target.value)}
+                  >
+                    <option value="all">All Roles</option>
+                    <option value="admin">Admin</option>
+                    <option value="reception">Reception</option>
+                    <option value="cleaner">Cleaner</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      { userfromshow &&
       <div className="user-form-card">
         <h2>Create New User</h2>
 
@@ -206,7 +288,7 @@ function Users() {
           <i className="fa-solid fa-user-plus"></i>
           Create User
         </button>
-      </div> : null
+      </div>
       }
 
       {editingUserId && (
@@ -243,29 +325,42 @@ function Users() {
           </div>
 
           <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
-            <button className="create-user-btn" onClick={() => updateUser(editingUserId)}>
-              <i className="fa-solid fa-save"></i>
-              Save Changes
+            <button 
+              type="button"
+              className="reservation-toggle-btn"
+              style={{
+                background: "#ffffff",
+                color: "#01cc01",
+                borderColor: "#01cc01",
+                width: "auto",
+                minWidth: "120px",
+              }}
+              onClick={() => updateUser(editingUserId)}
+            >
+              <i className="fa-solid fa-save" style={{ color: "#01cc01" }}></i>
+              <span style={{ color: "#01cc01" }}>Save Changes</span>
             </button>
             <button 
-              className="create-user-btn" 
-              style={{ backgroundColor: "#6c757d" }}
+              type="button"
+              className="reservation-toggle-btn"
+              style={{
+                background: "#ffffff",
+                color: "#ef4444",
+                borderColor: "#ef4444",
+                width: "auto",
+                minWidth: "100px",
+              }}
               onClick={() => {
                 setEditingUserId(null);
                 setUpdateUserData({ name: "", email: "", phone: "" });
               }}
             >
-              <i className="fa-solid fa-times"></i>
-              Cancel
+              <i className="fa-solid fa-times" style={{ color: "#ef4444" }}></i>
+              <span style={{ color: "#ef4444" }}>Cancel</span>
             </button>
           </div>
         </div>
       )}
-
-      
-
-      
-      
 
       {loading ? (
         <div className="loading-container">
@@ -281,15 +376,14 @@ function Users() {
                 <th className="table-header">Role</th>
                 <th className="table-header">Email</th>
                 <th className="table-header">Phone</th>
-
                 <th className="table-header">Action</th>
               </tr>
             </thead>
             <tbody>
-              {users.length === 0 ? (
+              {filteredUsers.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="4"
+                    colSpan="6"
                     className="table-cell"
                     style={{ textAlign: "center" }}
                   >
@@ -297,7 +391,7 @@ function Users() {
                   </td>
                 </tr>
               ) : (
-                users.map((user) => (
+                filteredUsers.map((user) => (
                   <tr key={user._id} className="table-row">
                     <td className="table-cell">{user.id}</td>
                     <td className="table-cell">
@@ -351,67 +445,92 @@ function Users() {
                     </td>
                     {user.role !== userdata.user.role ? (
                       <td className="table-cell">
-                        {editingUserId === user.id ? (
-                          <>
-                            <button
-                              style={{
-                                fontSize: "15px",
-                                width: "50px",
-                                margin: "5px",
-                                backgroundColor: "#01cc01",
-                              }}
-                              onClick={() => updateUser(user.id)}
-                            >
-                              <i className="fa-solid fa-check"></i>
-                            </button>
-                            <button
-                              style={{
-                                fontSize: "15px",
-                                width: "50px",
-                                margin: "5px",
-                                backgroundColor: "#6c757d",
-                              }}
-                              onClick={() => {
-                                setEditingUserId(null);
-                                setUpdateUserData({ name: "", email: "", phone: "" });
-                              }}
-                            >
-                              <i className="fa-solid fa-times"></i>
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <button
-                              style={{
-                                fontSize: "15px",
-                                width: "50px",
-                                margin: "5px",
-                                backgroundColor: "red",
-                              }}
-                              onClick={() => deleteUser(user.id, userdata.token)}
-                            >
-                              <i className="fa-solid fa-trash"></i>
-                            </button>
-                            <button
-                              style={{
-                                fontSize: "15px",
-                                width: "50px",
-                                margin: "5px",
-                                backgroundColor: "#01cc01",
-                              }}
-                              onClick={() => {
-                                setEditingUserId(user.id);
-                                setUpdateUserData({
-                                  name: user.name,
-                                  email: user.email || "",
-                                  phone: user.phone
-                                });
-                              }}
-                            >
-                              <i className="fa-solid fa-user-pen"></i>
-                            </button>
-                          </>
-                        )}
+                        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                          {editingUserId === user.id ? (
+                            <>
+                              <button
+                                type="button"
+                                className="reservation-toggle-btn"
+                                style={{
+                                  background: "#ffffff",
+                                  color: "#01cc01",
+                                  borderColor: "#01cc01",
+                                  width: "40px",
+                                  height: "40px",
+                                  minWidth: "40px",
+                                  padding: "0",
+                                }}
+                                onClick={() => updateUser(user.id)}
+                              >
+                                <i className="fa-solid fa-check" style={{ color: "#01cc01" }}></i>
+                              </button>
+                              <button
+                                type="button"
+                                className="reservation-toggle-btn"
+                                style={{
+                                  background: "#ffffff",
+                                  color: "#ef4444",
+                                  borderColor: "#ef4444",
+                                  width: "40px",
+                                  height: "40px",
+                                  minWidth: "40px",
+                                  padding: "0",
+                                }}
+                                onClick={() => {
+                                  setEditingUserId(null);
+                                  setUpdateUserData({ name: "", email: "", phone: "" });
+                                }}
+                              >
+                                <i className="fa-solid fa-times" style={{ color: "#ef4444" }}></i>
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button
+                                type="button"
+                                className="reservation-toggle-btn"
+                                style={{
+                                  background: "#ffffff",
+                                  color: "#ef4444",
+                                  borderColor: "#ef4444",
+                                  width: "40px",
+                                  height: "40px",
+                                  minWidth: "40px",
+                                  padding: "0",
+                                  marginTop: "0px",
+                                }}
+                                onClick={() => deleteUser(user.id, userdata.token)}
+                              >
+                                <i className="fa-solid fa-trash" style={{ color: "#ef4444" }}></i>
+                              </button>
+                              <button
+                                type="button"
+                                className="reservation-toggle-btn"
+                                style={{
+                                  background: "#ffffff",
+                                  color: "#01cc01",
+                                  borderColor: "#01cc01",
+                                  width: "40px",
+                                  height: "40px",
+                                  minWidth: "40px",
+                                  padding: "0",
+                                  marginTop: "0px",
+
+                                }}
+                                onClick={() => {
+                                  setEditingUserId(user.id);
+                                  setUpdateUserData({
+                                    name: user.name,
+                                    email: user.email || "",
+                                    phone: user.phone
+                                  });
+                                }}
+                              >
+                                <i className="fa-solid fa-user-pen" style={{ color: "#01cc01" }}></i>
+                              </button>
+                            </>
+                          )}
+                        </div>
                       </td>
                     ) : (
                       <td className="table-cell">-</td>
@@ -423,7 +542,6 @@ function Users() {
           </table>
         </div>
       )}
-      
     </div>
   );
 }

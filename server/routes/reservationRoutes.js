@@ -5,6 +5,7 @@ const Reservation = require('../models/reservationModel');
 const Cleaning = require('../models/cleaningModel');
 const authorizeRoles = require('../middleware/authorizeRoles');
 
+// Gets all reservations in the system
 router.get("/getallreservations",async(req,res)=>{
     try{
         const reservations = await Reservation.find();
@@ -14,6 +15,8 @@ router.get("/getallreservations",async(req,res)=>{
         res.status(400).json({messgae:err.message})
     }
 })
+
+// Creates a new reservation for a specific room
 router.post('/roomreservation/:roomNo', async (req, res) => {
     try {
         const { guestName, guestPhone, status, StayTime, customHours   } = req.body;
@@ -27,6 +30,7 @@ router.post('/roomreservation/:roomNo', async (req, res) => {
         if (StayTime === 'custom' && !customHours) {
             return res.status(400).json({ message: 'customHours must be provided when StayTime is custom' });
         }
+        // Calculates the charge based on room type and stay duration
         function chargeCalculate(roomType, StayTime, customHours) {
             const baseCharge = {
                 'single': 500,
@@ -72,13 +76,11 @@ router.post('/roomreservation/:roomNo', async (req, res) => {
     }
 });
 
-
-// Checkout route - INLINE to ensure it works
+// Handles checkout process for a reservation
 router.put('/checkout/:roomNo', async (req, res) => {
     try {
         const roomNo = String(req.params.roomNo).trim();
 
-        // Handle both string and numeric stored roomNo
         const room =
             (await Room.findOne({ roomNo })) ||
             (await Room.findOne({ roomNo: Number(roomNo) }));
@@ -121,6 +123,7 @@ router.put('/checkout/:roomNo', async (req, res) => {
     }
 });
 
+// Updates an existing reservation (admin and reception only)
 router.put('/update/reservation/:guestPhone',authorizeRoles('admin','reception'), async (req, res) => {
     try {
         const { guestName, guestPhone, roomNo, charge, StayTime, customHours } = req.body;
@@ -136,6 +139,7 @@ router.put('/update/reservation/:guestPhone',authorizeRoles('admin','reception')
         if (StayTime === 'custom' && !customHours) {
             return res.status(400).json({ message: 'customHours must be provided when StayTime is custom' });
         }
+        // Calculates the charge based on room type and stay duration
         function chargeCalculate(roomType, StayTime, customHours) {
             const baseCharge = {
                 'single': 500,
@@ -181,7 +185,7 @@ router.put('/update/reservation/:guestPhone',authorizeRoles('admin','reception')
     }
 });
 
-
+// Deletes a reservation (admin only)
 router.delete('/update/reservation/:guestPhone',authorizeRoles('admin'), async(req,res)=>{
     try{
         const reservation =  await Reservation.findOneAndDelete({ guestPhone: req.params.guestPhone });
@@ -196,4 +200,5 @@ router.delete('/update/reservation/:guestPhone',authorizeRoles('admin'), async(r
         res.status(500).json({ message: err.message });
     }
 });
+
 module.exports = router;

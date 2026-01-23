@@ -3,20 +3,20 @@ import "../App.css";
 import { Navigate } from "react-router-dom";
 
 function Dashboard() {
+  const userdata = JSON.parse(localStorage.getItem("userdata"));
+  if (!userdata) {
+    return <Navigate to="/login" />;
+  }
+
   const [totallength, setTotalLength] = useState("");
   const [occupiedlength, setOccupiedLength] = useState("");
   const [cleaninglength, setCleaningLength] = useState("");
   const [cleanerslength, setCleanerslength] = useState("");
   const [availablelength, setAvailableLength] = useState("");
+  const [underMaintenance, setUnderMaintenance] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const userdata = JSON.parse(localStorage.getItem("userdata"));
-  // console.log("Dashboard userdata:", userdata);
-  // console.log("Dashboard userdata user:", userdata?.token);
-  if (!userdata) {
-    return <Navigate to="/login" />;
-  }
-  
+  // Fetches all users and counts how many are cleaners
   async function fetchusersdata() {
     try {
       const users = await fetch("https://hotel-management-system-2spj.onrender.com/api/users/allusers");
@@ -27,7 +27,8 @@ function Dashboard() {
       console.error("Error fetching users:", err);
     }
   }
-  
+
+  // Fetches all rooms and calculates counts for different room statuses
   async function fetchroomdata() {
     try {
       const rooms = await fetch("https://hotel-management-system-2spj.onrender.com/api/rooms/allrooms");
@@ -39,9 +40,13 @@ function Dashboard() {
       let available = roomdata.filter(
         (room) => room.status === "available"
       ).length;
+      let maintenance = roomdata.filter(
+        (room) => room.status === "under_maintenance"
+      ).length;
       setCleaningLength(cleaning);
       setOccupiedLength(occupied);
       setAvailableLength(available);
+      setUnderMaintenance(maintenance);
       setTotalLength(roomdata.length);
     } catch (err) {
       console.error("Error fetching rooms:", err);
@@ -50,19 +55,11 @@ function Dashboard() {
     }
   }
   
-  async function refreshData() {
-    setLoading(true);
-    await Promise.all([fetchusersdata(), fetchroomdata()]);
-  }
-  
+  // Fetches user and room data when component mounts
   useEffect(() => {
     fetchusersdata();
     fetchroomdata();
   }, []);
-
-  const occupancyRate = totallength > 0 
-    ? Math.round((occupiedlength / totallength) * 100) 
-    : 0;
 
   if (loading) {
     return (
@@ -85,8 +82,6 @@ function Dashboard() {
           <div className="dashboard-overview-badge">Today's Overview</div>
         </div>
       </div>
-
-      
 
       <div className="dashboard-stats-grid">
         <div className="stat-card" style={{ background: "#fdf6e3" }}>
@@ -133,6 +128,18 @@ function Dashboard() {
           <span className="stat-card-value" style={{ color: "#e65100" }}>
             {cleanerslength || 0}
           </span>
+        </div>
+        <div className="stat-card" style={{ background: "linear-gradient(135deg, #e6c87a 0%, #c6a15b 100%)" }}>
+          <div className="stat-card-header">
+            <p className="stat-card-title">Under Maintenance</p>
+            <i className="fas fa-tools stat-card-icon" style={{ color: "#ffffff" }}></i>
+          </div>
+          <span className="stat-card-value" style={{ color: "#ffffff", fontSize: "32px" }}>
+            {underMaintenance || 0}
+          </span>
+          <p style={{ margin: "8px 0 0 0", fontSize: "12px", color: "rgba(255,255,255,0.9)" }}>
+            Rooms being serviced
+          </p>
         </div>
       </div>
     </div>

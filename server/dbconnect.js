@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 const connectDB = async()=>{
     try{
-        const connect = await mongoose.connect(process.env.MONGODBURL);
-        // console.log(`MongoDB connected: ${connect.connection.host}`);
+        const connect = await mongoose.connect(process.env.MONGODBURL || "mongodb+srv://allamgowrisankar01_db_user:allamgowrisankar01@hotel-management.ro6cjpk.mongodb.net/");
+        console.log(`MongoDB connected: ${connect.connection.host}`);
         
         // Drop the unique index on email if it exists
         const User = require('./models/userModel');

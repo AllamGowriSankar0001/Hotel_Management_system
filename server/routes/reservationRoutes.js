@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Room = require('../models/roomsModel');  
 const Reservation = require('../models/reservationModel'); 
+const Cleaning = require('../models/cleaningModel');
 const authorizeRoles = require('../middleware/authorizeRoles');
 
 router.get("/getallreservations",async(req,res)=>{
@@ -42,7 +43,8 @@ router.post('/roomreservation/:roomNo', async (req, res) => {
                     totalCharge = baseCharge[roomType] * 2 + (baseCharge[roomType] * 0.18);  
                     break;
                 case 'custom':
-                    totalCharge = (baseCharge[roomType] * (customHours / 12)) + (totalCharge[roomType] * 0.18); 
+                    baseCharger = (baseCharge[roomType] * (customHours / 12)) ;
+                    totalCharge = baseCharger + (baseCharger * 0.18); 
                     break;
                 default:
                     throw new Error('Invalid StayTime');
@@ -84,11 +86,10 @@ router.put('/checkout/:roomNo', async (req, res) => {
             return res.status(404).json({ message: 'Room not found' });
         }
 
-        // Grab latest reservation regardless of stored type (string/number)
         const reservation =
             (await Reservation.findOne({ roomNo }).sort({ createdAt: -1 })) ||
             (await Reservation.findOne({ roomNo: Number(roomNo) }).sort({ createdAt: -1 }));
-
+        
         if (!reservation) {
             return res.status(404).json({ message: `No reservation found for room ${roomNo}` });
         }
@@ -96,13 +97,18 @@ router.put('/checkout/:roomNo', async (req, res) => {
         if (reservation.status === 'CHECKED_OUT') {
             return res.status(400).json({ message: 'Already checked out' });
         }
+       
 
         room.status = 'cleaning_needed';
         await room.save();
 
         reservation.status = 'CHECKED_OUT';
         await reservation.save();
-
+        const createCleaning = await Cleaning.create({
+            roomNo: room.roomNo, 
+            status: 'cleaning_needed'
+        });
+        res.status(200).json(createCleaning);
         res.status(200).json({
             message: 'Checkout successful',
             roomStatus: room.status,

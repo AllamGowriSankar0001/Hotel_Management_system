@@ -9,7 +9,8 @@ const cleaningSchema = new mongoose.Schema(
 
     assignedTo: {
       type: String,
-      required: true,
+      default: null
+      // required: true,
     },
 
     status: {

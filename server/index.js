@@ -17,5 +17,6 @@ app.use('/api/rooms', roomRoutes);
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/cleanings', cleaningRoutes);
 app.listen(PORT,()=>{
-    // console.log(`The Server is running in the port ${PORT}`);
+    console.log(`The Server is running in the port ${PORT}`);
+    console.log(`http://localhost:${PORT}`);
 }) 

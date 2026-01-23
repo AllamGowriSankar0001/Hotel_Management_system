@@ -5,6 +5,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   async function handleSubmit(e) {
+
     e.preventDefault();
 
     const response = await fetch("https://hotel-management-system-2spj.onrender.com/api/users/login", {
@@ -12,7 +13,10 @@ function Login() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, password }),
     });
-
+    if (!response.ok) {
+      alert("Login failed. Please check your credentials.");
+      return;
+    }
     const data = await response.json();
     localStorage.setItem("userdata", JSON.stringify(data));
     const userdata = JSON.parse(localStorage.getItem("userdata"))

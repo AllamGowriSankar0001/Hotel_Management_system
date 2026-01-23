@@ -9,22 +9,41 @@ router.get('/allcleanings', async (req, res) => {
     const cleanings = await Cleaning.find();
     res.status(200).json(cleanings);
 })
-router.post('/startcleaning/:roomNo', verifyToken, authorizeRoles('admin','reception'), async (req, res) => {
-    const { roomNo,  assignedTo, status } = req.body;
+router.post(
+  '/startcleaning/:roomNo',
+  verifyToken,
+  authorizeRoles('admin', 'reception'),
+  async (req, res) => {
     try {
-        const cleaning = await Cleaning.create({
-            roomNo,
-            assignedTo,
-            status:'IN_PROGRESS'
-        });
-        const room = await Room.findOne({ roomNo: roomNo });
-        room.status = 'under_maintenance';
-        await room.save();
-        res.status(201).json(cleaning);
+      const { roomNo } = req.params;
+      const { assignedTo } = req.body;
+
+      const cleaning = await Cleaning.findOneAndUpdate(
+        { roomNo, status: 'cleaning_needed' },
+        {
+          status: 'IN_PROGRESS',
+          assignedTo,
+          assignedAt: new Date(),
+        },
+        { new: true }
+      );
+
+      if (!cleaning) {
+        return res.status(404).json({ message: 'Cleaning not found or already started' });
+      }
+
+      await Room.findOneAndUpdate(
+        { roomNo },
+        { status: 'under_maintenance' }
+      );
+
+      res.status(200).json(cleaning);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+      res.status(500).json({ message: err.message });
     }
-});
+  }
+);
+
 router.post('/completecleaning/:roomNo', verifyToken, authorizeRoles('admin','reception'), async (req, res) => {
     try{
         const { roomNo } = req.params;
@@ -33,9 +52,11 @@ router.post('/completecleaning/:roomNo', verifyToken, authorizeRoles('admin','re
             return res.status(404).json({ message: 'Cleaning record not found' });
         }
         cleaningRecord.status = 'COMPLETED';
+        cleaningRecord.completedAt = new Date();
         await cleaningRecord.save();
         const room = await Room.findOne({ roomNo: roomNo });
         room.status = 'available';
+
         await room.save();
         res.status(200).json({ message: 'Cleaning completed successfully', cleaningRecord });
     

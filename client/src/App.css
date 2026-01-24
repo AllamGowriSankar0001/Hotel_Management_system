@@ -1651,6 +1651,7 @@ table tbody tr:hover {
   border-collapse: collapse;
   color: #1b1b1b;
   border: none;
+  margin-bottom:100px;
 }
 
 .professional-table thead tr {

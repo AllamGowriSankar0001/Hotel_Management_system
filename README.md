@@ -3,8 +3,7 @@
 Full-stack hotel management web app with a **React (Vite)** frontend and a **Node.js (Express) + MongoDB (Mongoose)** backend. It covers authentication, role-based access, room inventory, reservations, and cleaning workflows for hotel operations.
 
 
-🔗 **Live Demo:**  
-https://hotel-management-system-alpha-ashy.vercel.app/
+🔗 **Live Demo:** https://hotel-management-system-alpha-ashy.vercel.app/
 
 ## What the project does
 
